@@ -49,7 +49,11 @@ def is_featurelike(feature):
 
 def has_layer(fcollection):
     """Returns true for a multi-layer dict of FeatureCollections."""
-    for val in fcollection.itervalues():
+    try:
+        coll_values = fcollection.itervalues()
+    except:
+        coll_values = fcollection.values()
+    for val in coll_values:
         if has_features(val):
             return True
     return False
@@ -96,7 +100,10 @@ class AbstractFeature(dict):
         raise NotImplementedError
 
     def is_serialized(self, key):
-        return isinstance(self[key], basestring)
+        try:
+            return isinstance(self[key], str)
+        except:
+            return isinstance(self[key], basestring)
 
     def copy(self):
         return self.__class__(**super(AbstractFeature, self).copy())
